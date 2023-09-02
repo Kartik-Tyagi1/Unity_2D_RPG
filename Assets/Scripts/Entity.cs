@@ -7,6 +7,7 @@ public class Entity : MonoBehaviour
     #region Components
     public Animator animator { get; private set; }
     public Rigidbody2D rb { get; private set; }
+    private EntityFX entityFX;
     #endregion
 
     [Header("Collision Parameters")]
@@ -20,6 +21,11 @@ public class Entity : MonoBehaviour
     public Transform attackCheck;
     public float attackCheckRadius;
 
+    [Header("KnockBack Parameters")]
+    public Vector2 knockBackDirection;
+    private bool isKnockedBack;
+    public float knockBackTime;
+
     public int facingDirection { get; private set; } = 1; // 1 is Right, -1 is Left
     protected bool facingRight = true;
 
@@ -27,6 +33,7 @@ public class Entity : MonoBehaviour
     {
         animator = GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        entityFX = GetComponent<EntityFX>();
     }
 
     protected virtual void Start()
@@ -42,6 +49,19 @@ public class Entity : MonoBehaviour
     public virtual void Damage()
     {
         Debug.Log(gameObject.name + " Was Attacked");
+        entityFX.StartCoroutine("FlashFX");
+        StartCoroutine("KnockBack");
+    }
+
+    private IEnumerator KnockBack()
+    {
+        isKnockedBack = true;
+
+        rb.velocity = new Vector2(knockBackDirection.x * -facingDirection, knockBackDirection.y);
+
+        yield return new WaitForSeconds(knockBackTime);
+
+        isKnockedBack = false;
     }
 
     #region Collision
@@ -85,10 +105,16 @@ public class Entity : MonoBehaviour
     #region Velocity
     public void SetVelocity(float _xVeloctiy, float _yVelocity)
     {
+        if (isKnockedBack) return;
+
         rb.velocity = new Vector2(_xVeloctiy, _yVelocity);
         FlipController(_xVeloctiy);
     }
 
-    public void SetZeroVelocity() => rb.velocity = new Vector2(0, 0);
+    public void SetZeroVelocity()
+    {
+        if (isKnockedBack) return;
+        rb.velocity = new Vector2(0, 0);
+    }
     #endregion
 }

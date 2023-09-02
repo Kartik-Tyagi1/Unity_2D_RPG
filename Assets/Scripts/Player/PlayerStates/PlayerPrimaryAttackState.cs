@@ -18,6 +18,10 @@ public class PlayerPrimaryAttackState : BasePlayerState
     public override void Enter()
     {
         base.Enter();
+
+        // To Prevent attack direction bug
+        xInput = 0;
+
         if (comboCounter > 2 || Time.time >= lastTimeAttacked + comboWindow) comboCounter = 0;
         stateTimer = 0.1f;
 
