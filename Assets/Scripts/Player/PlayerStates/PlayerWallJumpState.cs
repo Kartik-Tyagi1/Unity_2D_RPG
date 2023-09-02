@@ -25,6 +25,6 @@ public class PlayerWallJumpState : BasePlayerState
         base.Update();
 
         if (stateTimer < 0) stateMachine.ChangeState(player.airState);
-        if(player.IsOnGround()) stateMachine.ChangeState(player.idleState);
+        if(player.IsGroundDetected()) stateMachine.ChangeState(player.idleState);
     }
 }

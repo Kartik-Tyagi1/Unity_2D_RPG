@@ -34,7 +34,7 @@ public class PlayerWallslideState : BasePlayerState
         else rb.velocity = new Vector2(0, rb.velocity.y * 0.7f);
 
         // Go back to idle if the player moves off the wall on lands on the ground
-        if ((xInput != 0 && player.facingDirection != xInput) || player.IsOnGround()) stateMachine.ChangeState(player.idleState);
+        if ((xInput != 0 && player.facingDirection != xInput) || player.IsGroundDetected()) stateMachine.ChangeState(player.idleState);
         
     }
 }

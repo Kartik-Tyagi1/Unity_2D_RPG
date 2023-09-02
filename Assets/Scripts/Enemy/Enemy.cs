@@ -6,15 +6,20 @@ public class Enemy : Entity
 {
     public EnemyStateMachine stateMachine;
 
-    // Start is called before the first frame update
-    protected override void Start()
+    [Header("Move Parameters")]
+    public float moveSpeed;
+    public float idleTime;
+
+    protected override void Awake()
     {
+        base.Awake();
         stateMachine = new EnemyStateMachine();
     }
 
-    // Update is called once per frame
+
     protected override void Update()
     {
+        base.Update();
         stateMachine.currentState.Update();
     }
 }

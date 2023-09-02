@@ -21,7 +21,7 @@ public class PlayerAirState : BasePlayerState
     public override void Update()
     {
         base.Update();
-        if (player.IsOnGround()) stateMachine.ChangeState(player.idleState);
+        if (player.IsGroundDetected()) stateMachine.ChangeState(player.idleState);
 
         // Player only gets 80% of speed in the air
         if (xInput != 0) player.SetVelocity(xInput * 0.8f * player.moveSpeed, rb.velocity.y);
