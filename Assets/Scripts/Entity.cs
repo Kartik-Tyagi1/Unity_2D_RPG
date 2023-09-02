@@ -7,7 +7,7 @@ public class Entity : MonoBehaviour
     #region Components
     public Animator animator { get; private set; }
     public Rigidbody2D rb { get; private set; }
-    private EntityFX entityFX;
+    public EntityFX entityFX { get; private set; }
     #endregion
 
     [Header("Collision Parameters")]

@@ -23,4 +23,9 @@ public class Enemy_SkeletonAnimationTriggers : MonoBehaviour
             }
         }
     }
+
+
+    public void TurnOnCounterImage() => enemy.TurnOnCounterImage();
+    public void TurnOffCounterImage() => enemy.TurnOffCounterImage();
+    
 }

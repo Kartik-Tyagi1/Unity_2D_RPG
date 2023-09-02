@@ -20,6 +20,12 @@ public class Enemy : Entity
     public float attackCooldown;
     [HideInInspector] public float lastTimeAttacked;
 
+    [Header("Stunned Paremeters")]
+    public float stunnedTime;
+    public Vector2 stunnedDirection;
+    protected bool canBeStunned;
+    [SerializeField] protected GameObject counterImage;
+
     protected override void Awake()
     {
         base.Awake();
@@ -30,10 +36,33 @@ public class Enemy : Entity
     protected override void Update()
     {
         base.Update();
-        stateMachine.currentState.Update();      
+        stateMachine.currentState.Update();   
     }
 
     public void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishTrigger();
+
+    public virtual void TurnOnCounterImage()
+    {
+        canBeStunned = true;
+        counterImage.SetActive(true);
+    }
+
+    public virtual void TurnOffCounterImage()
+    {
+        canBeStunned= false;
+        counterImage.SetActive(false);
+    }
+
+    public virtual bool CanBeStunned()
+    {
+        if(canBeStunned)
+        {
+            TurnOffCounterImage();
+            return true;
+        }
+
+        return false;
+    }
 
     protected override void OnDrawGizmos()
     {

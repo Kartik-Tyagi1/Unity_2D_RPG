@@ -13,6 +13,7 @@ public class Player : Entity
     private const string DASH = "Dash";
     private const string WALL_SLIDE = "Wallslide";
     private const string ATTACK_PRIMARY = "Attack";
+    private const string COUNTER_ATTACK = "CounterAttack";
     #endregion
 
     #region States
@@ -25,6 +26,7 @@ public class Player : Entity
     public PlayerWallslideState wallslideState { get; private set; }
     public PlayerWallJumpState walljumpState { get; private set; }
     public PlayerPrimaryAttackState primaryAttackState { get; private set; }
+    public PlayerCounterAttackState counterAttackState { get; private set; }
 
     #endregion
 
@@ -44,7 +46,7 @@ public class Player : Entity
 
     [Header("Attack Parameters")]
     public float[] attackMovements;
-
+    public float counterAttackTime = 0.2f;
 
 
     protected override void Awake()
@@ -62,6 +64,7 @@ public class Player : Entity
         walljumpState = new PlayerWallJumpState(this, stateMachine, JUMP);
 
         primaryAttackState = new PlayerPrimaryAttackState(this, stateMachine, ATTACK_PRIMARY);
+        counterAttackState = new PlayerCounterAttackState(this, stateMachine, COUNTER_ATTACK);
     }
 
     protected override void Start()
