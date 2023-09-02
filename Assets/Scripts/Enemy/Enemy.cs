@@ -11,10 +11,14 @@ public class Enemy : Entity
     [Header("Move Parameters")]
     public float moveSpeed;
     public float idleTime;
+    public float battleTime;
+    public float playerGetAwayDistance;
 
     [Header("Attack Parameters")]
     public float attackDistance;
     public float playerDetectionRange;
+    public float attackCooldown;
+    [HideInInspector] public float lastTimeAttacked;
 
     protected override void Awake()
     {
@@ -28,6 +32,8 @@ public class Enemy : Entity
         base.Update();
         stateMachine.currentState.Update();      
     }
+
+    public void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishTrigger();
 
     protected override void OnDrawGizmos()
     {

@@ -45,6 +45,8 @@ public class Player : Entity
     [Header("Attack Parameters")]
     public float[] attackMovements;
 
+
+
     protected override void Awake()
     {
         base.Awake();
@@ -82,7 +84,7 @@ public class Player : Entity
         isBusy = false;
     }
 
-    public void AnimationTrigger() => stateMachine.currentState.AnimationFinishTrigger();
+    public void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishTrigger();
 
     // Move to dash state from here cause player should be able to dash from any state
     private void CheckForDashInput()

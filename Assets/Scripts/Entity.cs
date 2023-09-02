@@ -16,6 +16,10 @@ public class Entity : MonoBehaviour
     [SerializeField] protected float wallCheckDistance;
     [SerializeField] protected LayerMask groundMask;
 
+    [Header("Attack Parameters")]
+    public Transform attackCheck;
+    public float attackCheckRadius;
+
     public int facingDirection { get; private set; } = 1; // 1 is Right, -1 is Left
     protected bool facingRight = true;
 
@@ -35,6 +39,11 @@ public class Entity : MonoBehaviour
 
     }
 
+    public virtual void Damage()
+    {
+        Debug.Log(gameObject.name + " Was Attacked");
+    }
+
     #region Collision
 
     public bool IsGroundDetected() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, groundMask);
@@ -45,6 +54,7 @@ public class Entity : MonoBehaviour
     {
         Gizmos.DrawLine(groundCheck.position, new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
         Gizmos.DrawLine(wallCheck.position, new Vector3(wallCheck.position.x + wallCheckDistance * facingDirection, wallCheck.position.y));
+        Gizmos.DrawWireSphere(attackCheck.position, attackCheckRadius);
     }
 
     #endregion
@@ -79,6 +89,6 @@ public class Entity : MonoBehaviour
         FlipController(_xVeloctiy);
     }
 
-    public void ZeroVelocity() => rb.velocity = new Vector2(0, 0);
+    public void SetZeroVelocity() => rb.velocity = new Vector2(0, 0);
     #endregion
 }
