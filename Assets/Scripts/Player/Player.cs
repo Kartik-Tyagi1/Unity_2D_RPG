@@ -41,8 +41,6 @@ public class Player : Entity
     public float dashSpeed = 25f;
     public float dashDuration = 0.2f;
     public float dashDirection;
-    [SerializeField] private float dashCooldown;
-    [SerializeField] private float dashUsageTimer;
 
     [Header("Attack Parameters")]
     public float[] attackMovements;
@@ -94,10 +92,8 @@ public class Player : Entity
     {
         if (IsWallDetected()) return;
 
-        dashUsageTimer -= Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.LeftShift) && dashUsageTimer < 0)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && SkillManager.Instance.dashSkill.CanUseSkill())
         {
-            dashUsageTimer = dashCooldown;
             dashDirection = Input.GetAxisRaw("Horizontal");
             if (dashDirection == 0) dashDirection = facingDirection;
             stateMachine.ChangeState(dashState);
