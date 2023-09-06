@@ -30,6 +30,8 @@ public class Player : Entity
 
     #endregion
 
+    public SkillManager skillManager { get; private set; }
+
     public bool isBusy { get; private set; }
 
     [Header("Move Parameters")]
@@ -63,6 +65,8 @@ public class Player : Entity
 
         primaryAttackState = new PlayerPrimaryAttackState(this, stateMachine, ATTACK_PRIMARY);
         counterAttackState = new PlayerCounterAttackState(this, stateMachine, COUNTER_ATTACK);
+
+        skillManager = SkillManager.Instance;
     }
 
     protected override void Start()
