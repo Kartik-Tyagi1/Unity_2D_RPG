@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class Player : Entity
 {
     #region Animation Parameters
+
     private const string IDLE_STATE = "Idle";
     private const string MOVE_STATE = "Move";
     private const string JUMP = "Jump";
@@ -14,6 +15,9 @@ public class Player : Entity
     private const string WALL_SLIDE = "Wallslide";
     private const string ATTACK_PRIMARY = "Attack";
     private const string COUNTER_ATTACK = "CounterAttack";
+    private const string AIM_SWORD = "AimSword";
+    private const string CATCH_SWORD = "CatchSword";
+
     #endregion
 
     #region States
@@ -27,6 +31,8 @@ public class Player : Entity
     public PlayerWallJumpState walljumpState { get; private set; }
     public PlayerPrimaryAttackState primaryAttackState { get; private set; }
     public PlayerCounterAttackState counterAttackState { get; private set; }
+    public PlayerAimSwordState aimSwordState { get; private set; }
+    public PlayerCatchSwordState catchSwordState { get; private set; }
 
     #endregion
 
@@ -65,6 +71,9 @@ public class Player : Entity
 
         primaryAttackState = new PlayerPrimaryAttackState(this, stateMachine, ATTACK_PRIMARY);
         counterAttackState = new PlayerCounterAttackState(this, stateMachine, COUNTER_ATTACK);
+
+        aimSwordState = new PlayerAimSwordState(this, stateMachine, AIM_SWORD);
+        catchSwordState = new PlayerCatchSwordState(this, stateMachine, CATCH_SWORD); 
 
         skillManager = SkillManager.Instance;
     }
