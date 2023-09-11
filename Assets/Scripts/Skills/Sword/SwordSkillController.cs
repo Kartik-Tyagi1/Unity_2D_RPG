@@ -31,7 +31,7 @@ public class SwordSkillController : MonoBehaviour
         if(isReturning)
         {
             transform.position = Vector2.MoveTowards(transform.position, player.transform.position, swordReturnSpeed * Time.deltaTime);
-            if(Vector2.Distance(player.transform.position, transform.position) < swordDestoryDistance) player.ClearSword();
+            if(Vector2.Distance(player.transform.position, transform.position) < swordDestoryDistance) player.CatchSword();
         }
 
     }
@@ -47,6 +47,8 @@ public class SwordSkillController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider2D)
     {
+        if(isReturning) return;
+
         animator.SetBool(ROTATION, false);
 
         // Stop rotation and shut off the collider component
@@ -66,7 +68,7 @@ public class SwordSkillController : MonoBehaviour
     {
         animator.SetBool(ROTATION, true);
         
-        rb.isKinematic = false;
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
         transform.parent = null;
         isReturning = true;
     }

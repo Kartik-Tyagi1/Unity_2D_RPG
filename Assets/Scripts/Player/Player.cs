@@ -37,13 +37,14 @@ public class Player : Entity
     #endregion
 
     public SkillManager skillManager { get; private set; }
-    public GameObject sword;
+    public GameObject sword { get; private set; }
 
     public bool isBusy { get; private set; }
 
     [Header("Move Parameters")]
     public float moveSpeed = 8f;
     public float jumpForce;
+    public float swordReturnImpact;
 
 
     [Header("Dash Parameters")]
@@ -119,8 +120,9 @@ public class Player : Entity
         sword = _newSword;
     }
 
-    public void ClearSword()
+    public void CatchSword()
     {
+        stateMachine.ChangeState(catchSwordState);
         Destroy(sword);
     }
 }

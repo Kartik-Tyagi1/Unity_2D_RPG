@@ -17,15 +17,33 @@ public class PlayerAimSwordState : BasePlayerState
     public override void Exit()
     {
         base.Exit();
+
+        // Don't let player slide after aim
+        player.StartCoroutine("BusyFor", 0.2f);
     }
 
     public override void Update()
     {
         base.Update();
 
+        player.SetZeroVelocity();
+
         if(Input.GetKeyUp(KeyCode.Mouse1)) 
         {
             stateMachine.ChangeState(player.idleState);
         }
+
+        FlipPlayerOnMouseAim();
+    }
+
+    private void FlipPlayerOnMouseAim()
+    {
+        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        
+        // If mouse is on left side of player during aim and player is facing right then flip 
+        if(mousePosition.x < player.transform.position.x && player.facingDirection == 1) player.Flip();
+
+        // if mouse is on right side of the player during aim and player is facing left then flip
+        if(mousePosition.x > player.transform.position.x && player.facingDirection == -1) player.Flip();
     }
 }
