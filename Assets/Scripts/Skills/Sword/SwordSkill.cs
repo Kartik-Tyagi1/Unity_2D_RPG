@@ -3,26 +3,39 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
+public enum SwordType
+{
+    Regular, 
+    Bounce
+}
+
 public class SwordSkill : SkillBase
 {
+    public SwordType swordType = SwordType.Regular;
+
+
     [Header("Sword Throw Parameters")]
     [SerializeField] private GameObject swordPrefab;
     [SerializeField] private Vector2 launchForce;
     [SerializeField] private float swordGravityScale;
+    private Vector2 finalDirection;
+
     
     [Header("Dots Parameters")]
     [SerializeField] private int numOfDots;
     [SerializeField] private float spaceBetweenDots;
     [SerializeField] private GameObject dotPrefab;
     [SerializeField] private Transform dotsParent;
+    private GameObject[] dotsArray;
+
 
     [Header("Sword Return Parameters")]
     [SerializeField] private float returnTime;
 
-    private GameObject[] dotsArray;
 
-    private Vector2 finalDirection;
-
+    [Header("Bounce Parameters")]
+    [SerializeField] private int amountOfBounces = 4;
+    [SerializeField] private float bounceGravityScale = 4;
 
     protected override void Start()
     {
@@ -52,10 +65,18 @@ public class SwordSkill : SkillBase
         GameObject newSword = Instantiate(swordPrefab, player.transform.position, transform.rotation);
         SwordSkillController newSwordController = newSword.GetComponent<SwordSkillController>();
 
+        if(swordType == SwordType.Bounce)
+        {
+            swordGravityScale = bounceGravityScale;
+            newSwordController.SetupBounceSword(true, amountOfBounces);
+        }
+
         newSwordController.SetupSword(finalDirection, swordGravityScale, player);
         player.AssignNewSword(newSword);
         ShowDots(false);
     }
+
+    #region Aiming
 
     private Vector2 AimDirection()
     {
@@ -97,4 +118,6 @@ public class SwordSkill : SkillBase
         
         return postion;
     }
+
+    #endregion
 }

@@ -20,12 +20,12 @@ public class SwordSkillController : MonoBehaviour
     [SerializeField] private float swordDestoryDistance = 0.5f;
 
 
-    [Header("Boucing Parameters")]
-    public int amountOfBounces = 4;
-    public bool isBouncing = true;
+    [Header("Bouncing Parameters")]
+    private int amountOfBounces;
+    private bool isBouncing;
     public float bouncCollisionRadius = 10f;
     public float bounceSpeed;
-    public List<Transform> enemyTargets;
+    private List<Transform> enemyTargets;
     private int targetIndex;
 
 
@@ -40,35 +40,16 @@ public class SwordSkillController : MonoBehaviour
     {
         if (canRotate) transform.right = rb.velocity;
 
-        if(isReturning)
+        if (isReturning)
         {
             transform.position = Vector2.MoveTowards(transform.position, player.transform.position, swordReturnSpeed * Time.deltaTime);
-            if(Vector2.Distance(player.transform.position, transform.position) < swordDestoryDistance) player.CatchSword();
+            if (Vector2.Distance(player.transform.position, transform.position) < swordDestoryDistance) player.CatchSword();
         }
 
-        if(isBouncing && enemyTargets.Count > 0)
-        {
-            transform.position = Vector2.MoveTowards(transform.position, enemyTargets[targetIndex].position, bounceSpeed * Time.deltaTime);
-            if(Vector2.Distance(transform.position, enemyTargets[targetIndex].position) < .1f) 
-            {
-                targetIndex++;
-                amountOfBounces--;
-
-                if(targetIndex >= enemyTargets.Count)
-                {
-                    targetIndex = 0;
-                }
-
-                if(amountOfBounces <= 0)
-                {
-                    isBouncing = false;
-                    isReturning = true;
-                    targetIndex = 0;
-                }
-            }
-        }
+        HandleSwordBounce();
 
     }
+
 
     public void SetupSword(Vector2 _direction, float _gravityScale, Player _player)
     {
@@ -77,6 +58,14 @@ public class SwordSkillController : MonoBehaviour
         player = _player;
 
         animator.SetBool(ROTATION, true);
+    }
+
+    public void SetupBounceSword(bool _isBouncing, int _amountOfBounces)
+    {
+        isBouncing = _isBouncing;
+        amountOfBounces = _amountOfBounces;
+
+        enemyTargets = new List<Transform>();
     }
 
     private void OnTriggerEnter2D(Collider2D collider2D)
@@ -131,6 +120,31 @@ public class SwordSkillController : MonoBehaviour
                     {
                         enemyTargets.Add(enemy.transform);
                     }
+                }
+            }
+        }
+    }
+
+    private void HandleSwordBounce()
+    {
+        if (isBouncing && enemyTargets.Count > 0)
+        {
+            transform.position = Vector2.MoveTowards(transform.position, enemyTargets[targetIndex].position, bounceSpeed * Time.deltaTime);
+            if (Vector2.Distance(transform.position, enemyTargets[targetIndex].position) < .1f)
+            {
+                targetIndex++;
+                amountOfBounces--;
+
+                if (targetIndex >= enemyTargets.Count)
+                {
+                    targetIndex = 0;
+                }
+
+                if (amountOfBounces <= 0)
+                {
+                    isBouncing = false;
+                    isReturning = true;
+                    targetIndex = 0;
                 }
             }
         }
