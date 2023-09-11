@@ -22,7 +22,8 @@ public class PlayerGroundedState : BasePlayerState
     {
         base.Update();
 
-        if(Input.GetKeyDown(KeyCode.Mouse1)) stateMachine.ChangeState(player.aimSwordState);
+        // Only transition if player has not thrown the sword
+        if(Input.GetKeyDown(KeyCode.Mouse1) && !HasSword()) stateMachine.ChangeState(player.aimSwordState);
 
         if (Input.GetKeyDown(KeyCode.Q) && player.IsGroundDetected()) stateMachine.ChangeState(player.counterAttackState);
 
@@ -31,5 +32,18 @@ public class PlayerGroundedState : BasePlayerState
         if(!player.IsGroundDetected()) stateMachine.ChangeState(player.airState);
 
         if(Input.GetKeyDown(KeyCode.Mouse0)) stateMachine.ChangeState(player.primaryAttackState);
+    }
+
+    public bool HasSword()
+    {
+        // Player has thrown the sword, return it back to player
+        if(player.sword != null)
+        {
+            player.sword.GetComponent<SwordSkillController>().ReturnSwordToPlayer();
+            return true;
+        }
+
+        // Player has not thrown the sword
+        return false;
     }
 }

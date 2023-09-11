@@ -37,6 +37,7 @@ public class Player : Entity
     #endregion
 
     public SkillManager skillManager { get; private set; }
+    public GameObject sword;
 
     public bool isBusy { get; private set; }
 
@@ -111,5 +112,15 @@ public class Player : Entity
             if (dashDirection == 0) dashDirection = facingDirection;
             stateMachine.ChangeState(dashState);
         }
+    }
+
+    public void AssignNewSword(GameObject _newSword)
+    {
+        sword = _newSword;
+    }
+
+    public void ClearSword()
+    {
+        Destroy(sword);
     }
 }

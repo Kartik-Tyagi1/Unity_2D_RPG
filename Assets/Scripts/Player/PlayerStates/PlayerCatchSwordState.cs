@@ -20,6 +20,6 @@ public class PlayerCatchSwordState : BasePlayerState
 
     public override void Update()
     {
-        base.Update();
+        base.Update(); 
     }
 }

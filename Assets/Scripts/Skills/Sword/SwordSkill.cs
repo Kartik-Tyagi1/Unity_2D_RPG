@@ -16,6 +16,9 @@ public class SwordSkill : SkillBase
     [SerializeField] private GameObject dotPrefab;
     [SerializeField] private Transform dotsParent;
 
+    [Header("Sword Return Parameters")]
+    [SerializeField] private float returnTime;
+
     private GameObject[] dotsArray;
 
     private Vector2 finalDirection;
@@ -49,7 +52,8 @@ public class SwordSkill : SkillBase
         GameObject newSword = Instantiate(swordPrefab, player.transform.position, transform.rotation);
         SwordSkillController newSwordController = newSword.GetComponent<SwordSkillController>();
 
-        newSwordController.SetupSword(finalDirection, swordGravityScale);
+        newSwordController.SetupSword(finalDirection, swordGravityScale, player);
+        player.AssignNewSword(newSword);
         ShowDots(false);
     }
 
