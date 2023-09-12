@@ -13,6 +13,7 @@ public class Enemy : Entity
     public float idleTime;
     public float battleTime;
     public float playerGetAwayDistance;
+    private float defaultMoveSpeed;
 
     [Header("Attack Parameters")]
     public float attackDistance;
@@ -30,6 +31,7 @@ public class Enemy : Entity
     {
         base.Awake();
         stateMachine = new EnemyStateMachine();
+        defaultMoveSpeed = moveSpeed;
     }
 
 
@@ -37,6 +39,27 @@ public class Enemy : Entity
     {
         base.Update();
         stateMachine.currentState.Update();   
+    }
+
+    public virtual void FreezeEnemy(bool _timeFrozen)
+    {
+        if(_timeFrozen)
+        {
+            moveSpeed = 0f;
+            animator.speed = 0f;
+        }
+        else
+        {
+            moveSpeed = defaultMoveSpeed;
+            animator.speed = 1f;
+        }
+    }
+
+    protected virtual IEnumerator FreezeEnemyTimer(float _seconds)
+    {
+        FreezeEnemy(true);
+        yield return new WaitForSeconds(_seconds);
+        FreezeEnemy(false);
     }
 
     public void AnimationFinishTrigger() => stateMachine.currentState.AnimationFinishTrigger();

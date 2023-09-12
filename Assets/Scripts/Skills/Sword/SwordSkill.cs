@@ -22,6 +22,8 @@ public class SwordSkill : SkillBase
     [SerializeField] private Vector2 launchForce;
     [SerializeField] private float swordGravityScale;
     private Vector2 finalDirection;
+    [SerializeField] private float freezeTimeDuration;
+    [SerializeField] private float swordReturnSpeed;
 
     
     [Header("Dots Parameters")]
@@ -39,6 +41,7 @@ public class SwordSkill : SkillBase
     [Header("Bounce Parameters")]
     [SerializeField] private int bounceAmount;
     [SerializeField] private float bounceGravityScale;
+    [SerializeField] private float bounceSpeed;
 
 
     [Header("Pierce Parameters")]
@@ -86,7 +89,7 @@ public class SwordSkill : SkillBase
 
         if(swordType == SwordType.Bounce)
         {
-            newSwordController.SetupBounceSword(true, bounceAmount);
+            newSwordController.SetupBounceSword(true, bounceAmount, bounceSpeed);
         }
         else if(swordType == SwordType.Pierce)
         {
@@ -97,7 +100,7 @@ public class SwordSkill : SkillBase
             newSwordController.SetupSpinSword(true, maxTravelDistance, spinDuration,  hitCooldown);
         }
 
-        newSwordController.SetupSword(finalDirection, swordGravityScale, player);
+        newSwordController.SetupSword(finalDirection, swordGravityScale, player, freezeTimeDuration, swordReturnSpeed);
         player.AssignNewSword(newSword);
         ShowDots(false);
     }
