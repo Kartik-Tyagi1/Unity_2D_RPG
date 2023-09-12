@@ -8,7 +8,8 @@ public enum SwordType
 {
     Regular, 
     Bounce,
-    Pierce
+    Pierce,
+    Spin
 }
 
 public class SwordSkill : SkillBase
@@ -43,6 +44,14 @@ public class SwordSkill : SkillBase
     [Header("Pierce Parameters")]
     [SerializeField] private int pierceAmount;
     [SerializeField] private float pierceGravityScale;
+
+
+    [Header("Spin Parameters")]
+    [SerializeField] private float maxTravelDistance = 7f;
+    [SerializeField] private float spinDuration = 2f;
+    [SerializeField] private float spinGravityScale = 1f;
+    [SerializeField] private float hitCooldown = 0.35f;
+
 
     protected override void Start()
     {
@@ -83,6 +92,10 @@ public class SwordSkill : SkillBase
         {
             newSwordController.SetupPierceSword(pierceAmount);
         }
+        else if(swordType == SwordType.Spin)
+        {
+            newSwordController.SetupSpinSword(true, maxTravelDistance, spinDuration,  hitCooldown);
+        }
 
         newSwordController.SetupSword(finalDirection, swordGravityScale, player);
         player.AssignNewSword(newSword);
@@ -98,6 +111,9 @@ public class SwordSkill : SkillBase
                 break;
             case SwordType.Pierce:
                 swordGravityScale = pierceGravityScale;
+                break;
+            case SwordType.Spin:
+                swordGravityScale = spinGravityScale;
                 break;
         }
     }
