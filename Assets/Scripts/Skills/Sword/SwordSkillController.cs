@@ -21,12 +21,15 @@ public class SwordSkillController : MonoBehaviour
 
 
     [Header("Bouncing Parameters")]
-    private int amountOfBounces;
+    private int bounceAmount;
     private bool isBouncing;
     public float bouncCollisionRadius = 10f;
     public float bounceSpeed;
     private List<Transform> enemyTargets;
     private int targetIndex;
+
+    [Header("Pierce Parameters")]
+    [SerializeField] private int pierceAmount;
 
 
     private void Awake()
@@ -57,20 +60,28 @@ public class SwordSkillController : MonoBehaviour
         rb.gravityScale = _gravityScale;
         player = _player;
 
-        animator.SetBool(ROTATION, true);
+        // Only turn on sword spin animation for non-pierce sword
+        if(pierceAmount <= 0) animator.SetBool(ROTATION, true);
     }
 
     public void SetupBounceSword(bool _isBouncing, int _amountOfBounces)
     {
         isBouncing = _isBouncing;
-        amountOfBounces = _amountOfBounces;
+        bounceAmount = _amountOfBounces;
 
         enemyTargets = new List<Transform>();
+    }
+
+    public void SetupPierceSword(int _pierceAmount)
+    {
+        pierceAmount = _pierceAmount;
     }
 
     private void OnTriggerEnter2D(Collider2D collider2D)
     {
         if (isReturning) return;
+
+        collider2D.GetComponent<Enemy>()?.Damage();
 
         GetBouceTargets(collider2D);
         StickSwordIntoObject(collider2D);
@@ -79,6 +90,11 @@ public class SwordSkillController : MonoBehaviour
 
     private void StickSwordIntoObject(Collider2D collider2D)
     {
+        if(pierceAmount > 0 && collider2D.GetComponent<Enemy>() != null)
+        {
+            pierceAmount--;
+            return;
+        }
 
         // Stop rotation and shut off the collider component
         canRotate = false;
@@ -133,14 +149,14 @@ public class SwordSkillController : MonoBehaviour
             if (Vector2.Distance(transform.position, enemyTargets[targetIndex].position) < .1f)
             {
                 targetIndex++;
-                amountOfBounces--;
+                bounceAmount--;
 
                 if (targetIndex >= enemyTargets.Count)
                 {
                     targetIndex = 0;
                 }
 
-                if (amountOfBounces <= 0)
+                if (bounceAmount <= 0)
                 {
                     isBouncing = false;
                     isReturning = true;

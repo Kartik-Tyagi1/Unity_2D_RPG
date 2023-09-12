@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -6,7 +7,8 @@ using UnityEngine;
 public enum SwordType
 {
     Regular, 
-    Bounce
+    Bounce,
+    Pierce
 }
 
 public class SwordSkill : SkillBase
@@ -34,13 +36,21 @@ public class SwordSkill : SkillBase
 
 
     [Header("Bounce Parameters")]
-    [SerializeField] private int amountOfBounces = 4;
-    [SerializeField] private float bounceGravityScale = 4;
+    [SerializeField] private int bounceAmount;
+    [SerializeField] private float bounceGravityScale;
+
+
+    [Header("Pierce Parameters")]
+    [SerializeField] private int pierceAmount;
+    [SerializeField] private float pierceGravityScale;
 
     protected override void Start()
     {
         base.Start();
         GenerateDots();
+
+        // Gravity scale must be set here so that it can effect the dots curve before aiming starts
+        SetupGravityScale();
     }
 
     protected override void Update()
@@ -67,13 +77,29 @@ public class SwordSkill : SkillBase
 
         if(swordType == SwordType.Bounce)
         {
-            swordGravityScale = bounceGravityScale;
-            newSwordController.SetupBounceSword(true, amountOfBounces);
+            newSwordController.SetupBounceSword(true, bounceAmount);
+        }
+        else if(swordType == SwordType.Pierce)
+        {
+            newSwordController.SetupPierceSword(pierceAmount);
         }
 
         newSwordController.SetupSword(finalDirection, swordGravityScale, player);
         player.AssignNewSword(newSword);
         ShowDots(false);
+    }
+
+    private void SetupGravityScale()
+    {
+        switch(swordType)
+        {
+            case SwordType.Bounce:
+                swordGravityScale = bounceGravityScale;
+                break;
+            case SwordType.Pierce:
+                swordGravityScale = pierceGravityScale;
+                break;
+        }
     }
 
     #region Aiming
