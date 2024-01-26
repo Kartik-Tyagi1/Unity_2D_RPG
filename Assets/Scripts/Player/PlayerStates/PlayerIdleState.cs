@@ -23,6 +23,7 @@ public class PlayerIdleState : PlayerGroundedState
     {
         base.Update();
 
+        // Don't let player move into wall
         if (xInput == player.facingDirection && player.IsWallDetected()) return;
 
         if(xInput != 0 && !player.isBusy) stateMachine.ChangeState(player.moveState);

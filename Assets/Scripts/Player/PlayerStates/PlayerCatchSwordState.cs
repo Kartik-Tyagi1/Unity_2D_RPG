@@ -16,10 +16,10 @@ public class PlayerCatchSwordState : BasePlayerState
 
         sword = player.sword.transform;
 
-        // If mouse is on left side of player during aim and player is facing right then flip 
+        // If sword is on left side of player during aim and player is facing right then flip 
         if(sword.position.x < player.transform.position.x && player.facingDirection == 1) player.Flip();
 
-        // if mouse is on right side of the player during aim and player is facing left then flip
+        // if sword is on right side of the player during aim and player is facing left then flip
         if(sword.position.x > player.transform.position.x && player.facingDirection == -1) player.Flip();
 
         rb.velocity = new Vector2(player.swordReturnImpact * -player.facingDirection, rb.velocity.y);

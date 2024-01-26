@@ -26,14 +26,14 @@ public class SwordSkillController : MonoBehaviour
     [Header("Bouncing Parameters")]
     private int bounceAmount;
     private bool isBouncing;
-    public float bouncCollisionRadius = 10f;
+    public float bounceCollisionRadius = 10f;
     private float bounceSpeed;
     private List<Transform> enemyTargets;
     private int targetIndex;
 
 
     [Header("Pierce Parameters")]
-    [SerializeField] private int pierceAmount;
+    private int pierceAmount;
 
 
     [Header("Spin Sword")]
@@ -157,6 +157,7 @@ public class SwordSkillController : MonoBehaviour
     {
         animator.SetBool(ROTATION, true);
         
+        // No need to move the rigid body since return sword changes the objects transform
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
         transform.parent = null;
         isReturning = true;
@@ -169,7 +170,7 @@ public class SwordSkillController : MonoBehaviour
             // If sword hit an enemy and there are no enemies in the list, find enemies within overlap circle
             if(isBouncing && enemyTargets.Count <= 0)
             {
-                Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, bouncCollisionRadius);
+                Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, bounceCollisionRadius);
                 foreach(Collider2D enemy in enemies)
                 {
                     if(enemy.GetComponent<Enemy>() != null)
@@ -232,12 +233,25 @@ public class SwordSkillController : MonoBehaviour
                 // auto return sword to player when spinning duration is reached
                 if (spinTimer < 0)
                 {
-                    isReturning = true;
                     isSpinning = false;
+                    isReturning = true;
                 }
 
                 // Hit the enemies around the sword spin
                 SpinSwordHit();
+            }
+        }
+    }
+    private void SpinSwordHit()
+    {
+        hitTimer -= Time.deltaTime;
+        if (hitTimer < 0)
+        {
+            hitTimer = hitCooldown;
+            Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, 1);
+            foreach (Collider2D enemy in enemies)
+            {
+                enemy.GetComponent<Enemy>()?.Damage();
             }
         }
     }
@@ -250,31 +264,18 @@ public class SwordSkillController : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezePosition;
     }
 
-    private void SpinSwordHit()
-    {
-        hitTimer -= Time.deltaTime;
-        if (hitTimer < 0)
-        {
-            hitTimer = hitCooldown;
-            Collider2D[] enemies = Physics2D.OverlapCircleAll(transform.position, bouncCollisionRadius);
-            foreach (Collider2D enemy in enemies)
-            {
-                enemy.GetComponent<Enemy>()?.Damage();
-            }
-        }
-    }
-
     private void HandleSwordReturn()
     {
         if (isReturning)
         {
             transform.position = Vector2.MoveTowards(transform.position, player.transform.position, swordReturnSpeed * Time.deltaTime);
-            if (Vector2.Distance(player.transform.position, transform.position) < swordDestoryDistance) player.CatchSword();
+            if (Vector2.Distance(transform.position, player.transform.position) < swordDestoryDistance) 
+                player.CatchSword();
         }
     }
     
     protected virtual void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, bouncCollisionRadius);
+        Gizmos.DrawWireSphere(transform.position, bounceCollisionRadius);
     }
 }

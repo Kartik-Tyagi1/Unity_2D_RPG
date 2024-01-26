@@ -13,6 +13,7 @@ public class PlayerDashState : BasePlayerState
         base.Enter();
         stateTimer = player.dashDuration;
 
+        // TODO: Skill tree ability, player creates clones to attack enemy when dashing past an enemy
         player.skillManager.cloneSkill.CreateClone(player.transform);
     }
 
@@ -26,7 +27,8 @@ public class PlayerDashState : BasePlayerState
     {
         base.Update();
 
-        if(!player.IsWallDetected() && player.IsWallDetected()) stateMachine.ChangeState(player.wallslideState);
+        // Player is in the air and dashing into a wall, go to wallslide state
+        if(!player.IsGroundDetected() && player.IsWallDetected()) stateMachine.ChangeState(player.wallslideState);
 
         player.SetVelocity(player.dashDirection * player.dashSpeed, 0);
         if(stateTimer < 0f) stateMachine.ChangeState(player.idleState);

@@ -7,6 +7,7 @@ public class CloneSkill : SkillBase
     [Header("Clone Parameters")]
     [SerializeField] private GameObject playerClonePrefab;
     [SerializeField] private float cloneDuration;
+    [Space]
     [SerializeField] private bool cloneAttackSkillUnlocked;
     
 

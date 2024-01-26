@@ -2,6 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Base state for all states that happen on the ground
+ *  - IdleState
+ *  - AimSwordState
+ *  - CounterAttackState
+ *  - JumpState
+ *  - AttackState
+ *  
+ * Moves to air state is no ground is detected as failsafe
+ */
+
 public class PlayerGroundedState : BasePlayerState
 {
     public PlayerGroundedState(Player _player, PlayerStateMachine _stateMachine, string _animBoolName) : base(_player, _stateMachine, _animBoolName)

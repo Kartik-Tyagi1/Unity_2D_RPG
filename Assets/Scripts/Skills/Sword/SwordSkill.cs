@@ -97,7 +97,7 @@ public class SwordSkill : SkillBase
         }
         else if(swordType == SwordType.Spin)
         {
-            newSwordController.SetupSpinSword(true, maxTravelDistance, spinDuration,  hitCooldown);
+            newSwordController.SetupSpinSword(true, maxTravelDistance, spinDuration, hitCooldown);
         }
 
         newSwordController.SetupSword(finalDirection, swordGravityScale, player, freezeTimeDuration, swordReturnSpeed);
@@ -152,6 +152,7 @@ public class SwordSkill : SkillBase
 
     private Vector2 DotsPostion(float t)
     {
+        // Physics arc formula
         Vector2 postion = (Vector2)player.transform.position 
                             + new Vector2(
                                 AimDirection().normalized.x * launchForce.x, 

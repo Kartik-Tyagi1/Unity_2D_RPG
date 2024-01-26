@@ -22,6 +22,7 @@ public class PlayerPrimaryAttackState : BasePlayerState
         // To Prevent attack direction bug
         xInput = 0;
 
+        // Reset Combo Counter if we have over the max attack count, or if we are out of the combo time window
         if (comboCounter > 2 || Time.time >= lastTimeAttacked + comboWindow) comboCounter = 0;
         stateTimer = 0.1f;
 

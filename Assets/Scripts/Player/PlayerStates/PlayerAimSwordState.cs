@@ -28,6 +28,7 @@ public class PlayerAimSwordState : BasePlayerState
 
         player.SetZeroVelocity();
 
+        // Move back to idle when right mouse button is released, throwing the sword is called by ThrowSword Animation Trigger
         if(Input.GetKeyUp(KeyCode.Mouse1)) 
         {
             stateMachine.ChangeState(player.idleState);
